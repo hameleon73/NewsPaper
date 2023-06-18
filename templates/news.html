@@ -1,6 +1,8 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
 
+{% load censor_filter %}
+
 {% block title %}
 Новости
 {% endblock title %}
@@ -22,7 +24,7 @@
 
            {% for p in post %}
            <tr>
-               <td>{{ p.post_title }}</td>
+               <td>{{ p.post_title|censor }}</td>
                <td>{{ p.time_in|date:'d M Y' }}</td>
                <td>{{ p.post_text|truncatewords:20 }}</td>
            </tr>

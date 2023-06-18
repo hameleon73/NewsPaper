@@ -1,5 +1,6 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load censor_filter %}
 
 <!-- Название у нас будет Post -->
 {% block title %}
@@ -8,11 +9,11 @@ Post
 
 <!-- В контенте на странице мы выводим саму новость, идентификатор которой был передан в url -->
 {% block content %}
-<h1>{{ post.post_title }}</h1>
+<h1>{{ post.post_title|censor }}</h1>
     {{ post.time_in|date:'d M Y' }}
     <br>
     <hr>
-    {{ post.post_text }}
+    {{ post.post_text|censor }}
     <br>
     <hr>
     Автор статьи: {{ post.author.author_user }}

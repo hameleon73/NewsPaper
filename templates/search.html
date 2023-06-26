@@ -1,15 +1,23 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
-
 {% load censor_filter %}
 {% load custom_tags %}
-
+<!-- Название у нас будет Post -->
 {% block title %}
-Новости
+Post
 {% endblock title %}
 
-<!-- В контенте на странице мы выводим все новости -->
 {% block content %}
+<h3>Поиск новости</h3>
+
+   {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+   <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
 
    <h1>Все новости</h1>
     Количество новостей: {{ post|length }}
@@ -58,6 +66,4 @@
            <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
        {% endif %}
    {% endif %}
-
-
 {% endblock content %}

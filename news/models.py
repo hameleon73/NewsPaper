@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 
 class Author(models.Model):
     def update_rating(self): #взял данный блок из разбора, т.к. своя конструкция получалась не очень. про aggregate не знал
@@ -15,13 +16,15 @@ class Author(models.Model):
         self.author_rating = pRat * 3 + cRat
         self.save()
 
+
     author_user = models.OneToOneField(User, on_delete=models.CASCADE)
     author_rating = models.IntegerField(default=0)
 
 
 class Category(models.Model):
     cat_name = models.CharField(max_length=50, unique=True)
-
+    def __str__(self):
+        return self.cat_name
 
 class Post(models.Model):
     def like(self):
@@ -32,6 +35,12 @@ class Post(models.Model):
         self.save()
     def preview(self):
         return self.post_title[0:123]+'...'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
+
+    def __str__(self):
+        return self.post_title
 
     news = 'NW'
     post = 'PS'

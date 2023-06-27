@@ -15,6 +15,11 @@
     Количество новостей: {{ post|length }}
 
    <h3>{{ time_now|date:'d M Y' }}</h3>
+
+    {% if perms.news.add_post %}
+    <a href="{% url 'post_create' %}">Добавить запись</a>
+    {% endif %}
+
    <hr>
    {% if post %}
        <table>
@@ -22,6 +27,9 @@
                <td>Загаловок</td>
                <td>Дата публикации</td>
                <td>Краткое описание</td>
+               {% if perms.news.change_post or perms.news.delete_post %}
+               <td>Действия</td>
+               {% endif %}
            </tr>
 
            {% for p in post %}
@@ -29,6 +37,15 @@
                <td>{{ p.post_title|censor }}</td>
                <td>{{ p.time_in|date:'d M Y' }}</td>
                <td>{{ p.post_text|truncatewords:20|censor }}</td>
+               <td>
+               {% if perms.news.change_post %}
+                   <a href="{% url 'post_update' pk=p.id %}">Изменить</a>
+               {% endif %}
+               {% if perms.news.delete_post %}
+                    <a href="{% url 'post_delete' pk=p.id %}">Удалить</a>
+               {% endif %}
+               </td>
+
            </tr>
            {% endfor %}
 

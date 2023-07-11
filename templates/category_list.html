@@ -12,16 +12,14 @@
 {% block content %}
 
    <h1>Все новости</h1>
-    Количество новостей: {{ post|length }}
+    Количество новостей: {{ category_news_list|length }}
 
-   <h3>{{ time_now|date:'d M Y' }}</h3>
-
-    {% if perms.news.add_post %}
-    <a href="{% url 'post_create' %}">Добавить запись</a>
+    {% if is_not_subscriber %}
+      <a href="{% url 'subscribe' category.id %}">Подписаться</a>
     {% endif %}
 
    <hr>
-   {% if post %}
+   {% if category_news_list %}
        <table>
            <tr>
                <td>Загаловок</td>
@@ -33,14 +31,16 @@
                {% endif %}
            </tr>
 
-           {% for p in post %}
+           {% for p in category_news_list %}
            <tr>
                <td>{{ p.post_title|censor }}</td>
                <td>{{ p.time_in|date:'d M Y' }}</td>
                <td>{{ p.post_text|truncatewords:20|censor }}</td>
-               <td> {% for category in p.categories.all %}
-                   <a href="{% url 'category_list' category.id %}"> {{ category }} </a>
-                    {% endfor %}</td>
+               <td>
+                 {% for category in p.categories.all %}
+                    <a href="{% url 'category_list' category.id %}"> {{ category }} </a>
+                 {% endfor %}
+               </td>
                <td>
                {% if perms.news.change_post %}
                    <a href="{% url 'post_update' pk=p.id %}">Изменить</a>

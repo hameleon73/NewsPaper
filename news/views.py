@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
+from tasks import notify_about_new_post
+
+from .tasks import hello
 
 
 class PostList(ListView):
@@ -63,6 +66,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.cat_type = 'NW'
+        notify_about_new_post.apply_async([post.pk])
         return super().form_valid(form)
 
 class ArticleCreate(PermissionRequiredMixin, CreateView):
@@ -74,6 +78,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.cat_type = 'PS'
+        notify_about_new_post.apply_async([post.pk])
         return super().form_valid(form)
 
 class PostUpdate(PermissionRequiredMixin, UpdateView):
@@ -152,3 +157,5 @@ def subscribe(request, pk):
     category.subscribers.add(user)
     message = "Вы подписались на новости категории"
     return render(request, 'subscribe.html', {'category': category, 'message': message})
+
+

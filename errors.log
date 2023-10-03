@@ -1,0 +1,48 @@
+ERROR Internal Server Error: /subscriptions/ C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'Subscriber' is not defined"), <traceback object at 0x0000029D06B64A80>) 2023-10-03 21:04:13,012
+Traceback (most recent call last):
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\newspaper\news\views.py", line 126, in subscriptions
+    Subscriber.objects.filter(
+NameError: name 'Subscriber' is not defined
+ERROR "GET /subscriptions/ HTTP/1.1" 500 82086 C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\servers\basehttp.py None 2023-10-03 21:04:13,014
+ERROR Internal Server Error: /subscriptions/ C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'Subscriber' is not defined"), <traceback object at 0x0000026C54EEA740>) 2023-10-03 21:09:10,047
+Traceback (most recent call last):
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\utils\decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\newspaper\news\views.py", line 126, in subscriptions
+    Subscriber.objects.filter(
+NameError: name 'Subscriber' is not defined
+ERROR "GET /subscriptions/ HTTP/1.1" 500 82406 C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\servers\basehttp.py None 2023-10-03 21:09:10,048
+ERROR Internal Server Error: /news/create/ C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'notify_about_new_post' is not defined"), <traceback object at 0x00000208AB8CCC00>) 2023-10-03 21:13:52,478
+Traceback (most recent call last):
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\contrib\auth\mixins.py", line 109, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\views\generic\edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\views\generic\edit.py", line 153, in post
+    return self.form_valid(form)
+  File "C:\Users\Алексей\PycharmProjects\news_portal\newspaper\news\views.py", line 69, in form_valid
+    notify_about_new_post.apply_async([post.pk])
+NameError: name 'notify_about_new_post' is not defined
+ERROR "POST /news/create/ HTTP/1.1" 500 145 C:\Users\Алексей\PycharmProjects\news_portal\venv\lib\site-packages\django\core\servers\basehttp.py None 2023-10-03 21:13:52,504

@@ -14,7 +14,7 @@ def censor(text):
 
    for word in text.split():
       if word in CENS_SYMBOLS:
-         new_text.append('***')
+         new_text.append(word[0] + "*"*(len(word)-2) + word[-1])
       else:
          new_text.append(word)
    text = " ".join(new_text)

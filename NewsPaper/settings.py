@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)wt#7tq_bc2w^mmmr6-5%ip2ldjwngxmmrzcfw=%z3xss!^3ak'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -166,3 +166,132 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+#Итоговое задание 13.4
+#
+#В консоль должны выводиться все сообщения уровня DEBUG и выше, включающие время, уровень сообщения, сообщения. Для сообщений WARNING и выше дополнительно должен выводиться путь к источнику события (используется аргумент pathname в форматировании). А для сообщений ERROR и CRITICAL еще должен выводить стэк ошибки (аргумент exc_info). Сюда должны попадать все сообщения с основного логгера django.
+#В файл general.log должны выводиться сообщения уровня INFO и выше только с указанием времени, уровня логирования, модуля, в котором возникло сообщение (аргумент module) и само сообщение. Сюда также попадают сообщения с регистратора django.
+#В файл errors.log должны выводиться сообщения только уровня ERROR и CRITICAL. В сообщении указывается время, уровень логирования, само сообщение, путь к источнику сообщения и стэк ошибки. В этот файл должны попадать сообщения только из логгеров django.request, django.server, django.template, django.db.backends.
+#В файл security.log должны попадать только сообщения, связанные с безопасностью, а значит только из логгера django.security. Формат вывода предполагает время, уровень логирования, модуль и сообщение.
+#На почту должны отправляться сообщения уровней ERROR и выше из django.request и django.server по формату, как в errors.log, но без стэка ошибок.
+#Более того, при помощи фильтров нужно указать, что в консоль сообщения отправляются только при DEBUG = True, а на почту и в файл general.log — только при DEBUG = False.
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'debug': {
+            'format': '{levelname} {message} {asctime}',
+            'datetime': '%Y-%m-%d %H:%M:%S',
+            'style': '{'
+        },
+        'warnings': {
+            'format': '{levelname} {message} {pathname} {asctime}',
+            'datetime': '%Y-%m-%d %H:%M:%S',
+            'style': '{'
+        },
+        'errors': {
+            'format': '{levelname} {message} {pathname} {exc_info} {asctime}',
+            'datetime': '%Y-%m-%d %H:%M:%S',
+            'style': '{'
+        },
+        'security': {
+            'format': '{levelname} {module} {message} {asctime}',
+            'datetime': '%Y-%m-%d %H:%M:%S',
+            'style': '{'
+        },
+        'general': {
+            'format': '{levelname} {module} {message} {asctime}',
+            'datetime': '%Y-%m-%d %H:%M:%S',
+            'style': '{'
+        }
+    },
+
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+
+    'handlers': {
+        'console_debug': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'debug',
+            'filters': ['require_debug_true'],
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'formatter': 'warnings',
+            'filters': ['require_debug_true'],
+        },
+        'console_errors': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'errors',
+            'filters': ['require_debug_true'],
+        },
+        'general': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'general',
+            'filters': ['require_debug_false'],
+        },
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'errors',
+        },
+        'security': {
+            'formatter': 'security',
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+        },
+
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+        }
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_warning', 'console_errors', 'general'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['mail_admins', 'errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.template': {
+            'handlers': [ 'errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}

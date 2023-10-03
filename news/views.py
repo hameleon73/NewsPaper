@@ -10,9 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
-from tasks import notify_about_new_post
+#from .tasks import notify_about_new_post
 
-from .tasks import hello
+
 
 
 class PostList(ListView):

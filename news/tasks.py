@@ -1,6 +1,6 @@
 from celery import shared_task
 import datetime
-from models import Post, Category
+from .models import Post, Category, PostCategory
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -48,14 +48,14 @@ def send_notifications(preview, pk, post_title, subscribers):
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
 
-@receiver(m2m_changed, sender=PostCategory)
-def notify_about_new_post(instance, sender, **kwargs):
-    if kwargs['action'] =='post_add':
-        categories = instance.categories.all()
-        subscribers: list[str] = []
-        for category in categories:
-            subscribers += category.subscribers.all()
+#@receiver(m2m_changed, sender=PostCategory)
+#def notify_about_new_post(instance, sender, **kwargs):
+#    if kwargs['action'] =='post_add':
+#        categories = instance.categories.all()
+#        subscribers: list[str] = []
+#        for category in categories:
+#            subscribers += category.subscribers.all()
 
-        subscribers = [s.email for s in subscribers]
+#        subscribers = [s.email for s in subscribers]
 
-        send_notifications(instance.preview(), instance.pk, instance.post_title, subscribers)
+#       send_notifications(instance.preview(), instance.pk, instance.post_title, subscribers)
